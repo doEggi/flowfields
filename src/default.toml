@@ -1,0 +1,8 @@
+width = 4096
+height = 4096
+complexity = 1.0
+min_color = 0.3
+color_complexity = 1.0
+particles = 1000
+thickness = 1
+circle = true
