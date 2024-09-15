@@ -14,8 +14,8 @@ circle_sharpness = 2.0
 randomness = 0.2
 
 # [min, max] from 0.0 to 1.0
-# 0.0 is black, 1.0 is white
-luminance = [1.0, 1.0]
+# 0.0 is black, 1.0 is lightest
+luminance = [0.8, 1.0]
 # 0.0 is gray, 1.0 is max saturation
 chroma = [0.6, 1.0]
 # in degrees, both directions are possible
