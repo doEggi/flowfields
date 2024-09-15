@@ -6,7 +6,9 @@ edition = "2021"
 [dependencies]
 image = "0.25.2"
 imageproc = "0.25.0"
-noise = "0.9.0"
+lerp = "0.5.0"
+noise = { version = "0.9.0", features = ["images"] }
+palette = { version = "0.7.6", features = ["random"] }
 rand = "0.8.5"
 serde = { version = "1.0.210", features = ["derive"] }
 toml = "0.8.19"

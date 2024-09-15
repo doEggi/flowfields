@@ -1,8 +1,22 @@
 width = 4096
 height = 4096
 complexity = 1.0
-min_color = 0.3
-color_complexity = 1.0
 particles = 1000
+# "Length" of particles
+stripes = 2000
 thickness = 1
+background = [0.06, 0.06, 0.06]
 circle = true
+# Higher numbers make the line of the circle less blurred
+# Numbers lower then 1.0 make the picture way darker...
+circle_sharpness = 2.0
+# Makes picture noisy by oerlapping lines
+randomness = 0.2
+
+# [min, max] from 0.0 to 1.0
+# 0.0 is black, 1.0 is white
+luminance = [1.0, 1.0]
+# 0.0 is gray, 1.0 is max saturation
+chroma = [0.6, 1.0]
+# in degrees, both directions are possible
+hue_offset = [60, 90]
