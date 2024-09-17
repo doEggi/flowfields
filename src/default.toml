@@ -11,13 +11,15 @@ circle = true
 # Numbers lower then 1.0 make the picture way darker...
 circle_sharpness = 2.0
 # Makes picture noisy by oerlapping lines
-randomness = 0.2
-blur = 1.0
+randomness = 0.4
+blur = 1.5
 
 # [min, max] from 0.0 to 1.0
 # 0.0 is black, 1.0 is lightest
 luminance = [0.8, 1.0]
 # 0.0 is gray, 1.0 is max saturation
-chroma = [0.6, 1.0]
-# in degrees, both directions are possible
+chroma = [0.2, 0.8]
+# in degrees
+hue_start = [0, 360]
+# both directions are possible
 hue_offset = [60, 90]

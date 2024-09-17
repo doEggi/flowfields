@@ -23,6 +23,7 @@ struct Config {
     luminance: [f64; 2],
     chroma: [f64; 2],
     hue_offset: [u16; 2],
+    hue_start: [u16; 2],
     stripes: u64,
     blur: f32,
 }
@@ -39,7 +40,9 @@ fn main() -> MyResult {
         return Ok(());
     }
     let data_string = fs::read_to_string(CONFIG)?;
-    let data: Config = toml::from_str(&data_string)?;
+    let mut data: Config = toml::from_str(&data_string)?;
+    data.luminance = data.luminance.map(|val| val.clamp(0.0, 1.0));
+    data.chroma = data.chroma.map(|val| val.clamp(0.0, 1.0));
 
     for _ in 0..count {
         make_image(&data)?;
@@ -69,10 +72,19 @@ fn make_image(data: &Config) -> MyResult {
     let luminance2 = data.luminance[0].lerp(data.luminance[1], random::<f64>());
     let chroma1 = data.chroma[0].lerp(data.chroma[1], random::<f64>());
     let chroma2 = data.chroma[0].lerp(data.chroma[1], random::<f64>());
-    let hue1: OklabHue<f64> = random();
+    let hue1: OklabHue<f64> = OklabHue::from_degrees(
+        (data.hue_start[0] as f64).lerp(data.hue_start[1] as f64, random::<f64>()),
+    );
     let hue2: OklabHue<f64> = OklabHue::from_degrees(
-        hue1.into_degrees()
-            + (-f64::from(data.hue_offset[0]).lerp(data.hue_offset[1] as f64, random::<f64>())),
+        hue1.into_degrees() + {
+            let mut offset =
+                (data.hue_offset[0] as f64).lerp(data.hue_offset[1] as f64, random::<f64>());
+            let positive = random::<bool>();
+            if !positive {
+                offset = -offset;
+            }
+            offset
+        },
     );
     let color1: Oklab<f64> = Oklch::new(luminance1, chroma1, hue1).into_color();
     let color2: Oklab<f64> = Oklch::new(luminance2, chroma2, hue2).into_color();
@@ -113,15 +125,7 @@ fn make_image(data: &Config) -> MyResult {
 
     image = image::imageops::blur(&image, data.blur);
     image.save(format!("{}.png", name_index))?;
-    println!(
-        "Saved image:\nColor1:\nL = {}\nc = {}\nh = {}\nColor2:\nL = {}\nc = {}\nh = {}",
-        luminance1,
-        chroma1,
-        hue1.into_degrees(),
-        luminance2,
-        chroma2,
-        hue2.into_degrees(),
-    );
+    println!("Saved image!");
     Ok(())
 }
 
@@ -132,6 +136,7 @@ fn get_color(
     x: f64,
     y: f64,
     gen: f64,
+    //pixel: Srgb<f64>,
 ) -> [u8; 4] {
     let background: Srgb<f64> =
         Srgb::new(data.background[0], data.background[1], data.background[2]);
@@ -147,7 +152,7 @@ fn get_color(
     } else {
         1.0
     };
-    let mult = 0.0.lerp(1.6, gen).min(1.0) * distance;
+    let mult = /*0.0.lerp(1.6, gen).min(1.0) **/ distance;
     let r = (background.red.lerp(rgb.red, mult) * 255.) as u8;
     let g = (background.green.lerp(rgb.green, mult) * 255.) as u8;
     let b = (background.blue.lerp(rgb.blue, mult) * 255.) as u8;
