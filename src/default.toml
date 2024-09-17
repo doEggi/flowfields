@@ -12,6 +12,7 @@ circle = true
 circle_sharpness = 2.0
 # Makes picture noisy by oerlapping lines
 randomness = 0.2
+blur = 1.0
 
 # [min, max] from 0.0 to 1.0
 # 0.0 is black, 1.0 is lightest

@@ -24,6 +24,7 @@ struct Config {
     chroma: [f64; 2],
     hue_offset: [u16; 2],
     stripes: u64,
+    blur: f32,
 }
 
 type MyResult = Result<(), Box<dyn Error>>;
@@ -110,6 +111,7 @@ fn make_image(data: &Config) -> MyResult {
         name_index += 1;
     }
 
+    image = image::imageops::blur(&image, data.blur);
     image.save(format!("{}.png", name_index))?;
     println!(
         "Saved image:\nColor1:\nL = {}\nc = {}\nh = {}\nColor2:\nL = {}\nc = {}\nh = {}",
